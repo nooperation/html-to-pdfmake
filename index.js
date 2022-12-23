@@ -451,6 +451,7 @@ function htmlToPdfMake(htmlText, options) {
             delete ret.text;
             // apply all the inhirent classes and styles from the parents, or for the current element
             ret = this.applyStyle({ret:ret, parents:parents.concat([element])});
+            //ret.fit = [256, 256]
             break;
           }
           case "A": {
@@ -861,15 +862,27 @@ function htmlToPdfMake(htmlText, options) {
    * @return {Number|Boolean} Return the pt value, or false
    */
   this.convertToUnit = function(val) {
+    var PAGE_HEIGHT = 792
+    var PAGE_WIDTH = 612
+
     // if it's just a number, then return it
     if (!isNaN(parseFloat(val)) && isFinite(val)) return val*1;
-    var mtch = (val+"").trim().match(/^(\d*(\.\d+)?)(pt|px|r?em|cm)$/);
+    var mtch = (val+"").trim().match(/^(\d*(\.\d+)?)(pt|px|r?em|cm|vw|vh|%)$/);
     // if we don't have a number with supported units, then return false
     if (!mtch) return false;
     val = mtch[1];
     switch(mtch[3]) {
       case 'px':{
         val = Math.round(val * 0.75292857248934); // 1px => 0.75292857248934pt
+        break;
+      }
+      case '%':
+      case 'vw': {
+        val = val/100.0 * PAGE_WIDTH
+        break;
+      }
+      case 'vh': {
+        val = val/100.0 * PAGE_HEIGHT
         break;
       }
       case 'em':
