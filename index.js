@@ -451,7 +451,8 @@ function htmlToPdfMake(htmlText, options) {
             delete ret.text;
             // apply all the inhirent classes and styles from the parents, or for the current element
             ret = this.applyStyle({ret:ret, parents:parents.concat([element])});
-            //ret.fit = [256, 256]
+            ret.fit = [Math.min(ret.width, 512), Math.min(ret.width, 512)]
+            
             break;
           }
           case "A": {
