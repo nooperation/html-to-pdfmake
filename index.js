@@ -72,7 +72,7 @@ function htmlToPdfMake(htmlText, options) {
   }
 
   // store the references to the images
-  this.imagesRef = [];
+  this.imagesRef = (options && Array.isArray(options.imagesRef) ? options.imagesRef : []);
 
   /**
    * Permit to change the default styles based on the options
